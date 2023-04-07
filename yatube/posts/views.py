@@ -2,11 +2,13 @@ from django.shortcuts import render
 from .models import Post, Group
 from django.shortcuts import get_object_or_404
 
+
 # Create your views here.
+NUM_OF_POSTS = 10
 
 
 def index(request):
-    posts = Post.objects.order_by('-pub_date')[:10]
+    posts = Post.objects.order_by('-pub_date')[:NUM_OF_POSTS]
     context = {
         'posts': posts,
     }
@@ -14,10 +16,10 @@ def index(request):
 
 
 def group_posts(request, slug):
-    num_of_posts = 10
+
     group = get_object_or_404(Group, slug=slug)
-    related_name = group
-    posts = Post.objects.filter(group=related_name).order_by('-pub_date')[:num_of_posts]
+    posts = group.group_posts.all()
+    posts = posts.order_by('-pub_date')[:NUM_OF_POSTS]
     context = {
         'group': group,
         'posts': posts,
