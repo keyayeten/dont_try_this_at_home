@@ -11,7 +11,7 @@
           {{ group.description }}
         </p>
         <article>
-          {% for post in posts %}
+          {% for post in page_obj %}
           <ul>
             <li>
               Автор: {{ post.author.get_full_name }}
@@ -28,5 +28,6 @@
         {% endfor %}
         </article>
         <!-- под последним постом нет линии -->
-      </div>  
+      </div>
+  {% include 'posts/includes/paginator.html' %}
 {% endblock %}
