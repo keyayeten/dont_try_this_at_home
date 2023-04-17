@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Post, Group, User
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator
-
+from .forms import PostForm
 # Create your views here.
 NUM_OF_POSTS = 10
 
@@ -65,3 +65,19 @@ def post_detail(request, post_id):
         'count': len(user_posts)
     }
     return render(request, 'posts/post_detail.html', context)
+
+
+def post_create(request):
+    username = User.objects.get(pk=request.user.id)
+    author_id = request.user.id
+
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(f'/profile/{username}/')
+    else:
+        initial_data = {'author': username}
+        form = PostForm(initial=initial_data)
+    return render(request, 'posts/create_post.html', {'form': form,
+                                                      'author': username})
