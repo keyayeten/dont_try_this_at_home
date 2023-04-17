@@ -13,7 +13,7 @@
                 <form method="post" action="{% url 'posts:create_post' %}">
                   {% csrf_token %}
                   <div class="form-group row my-3 p-3">
-                    <label for="{{ form.author.id_for_label }}">Автор</label>
+                    <label for="{{ form.author.id_for_label }}">Автор : {{ author }}</label>
                     </label>
                     <input type="{{ form.author.field.widget.input_type }}"
                            id="{{ form.author.id_for_label }}"
