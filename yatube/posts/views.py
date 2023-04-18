@@ -81,7 +81,9 @@ def post_create(request):
         initial_data = {'author': username}
         form = PostForm(initial=initial_data)
     return render(request, 'posts/create_post.html', {'form': form,
-                                                      'author': username})
+                                                      'author': username,
+                                                      'is_edit': False
+                                                      })
 
 
 def post_edit(request, post_id):
@@ -101,4 +103,6 @@ def post_edit(request, post_id):
         form = PostForm(initial=initial_data)
 
     return render(request, 'posts/create_post.html', {'form': form,
-                                                      'author': username})
+                                                      'author': username,
+                                                      'is_edit': True
+                                                      })
