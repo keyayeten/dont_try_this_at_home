@@ -7,6 +7,7 @@ from .forms import PostForm
 NUM_OF_POSTS = 10
 
 
+
 def index(request):
     post_list = Post.objects.all().order_by('-pub_date')
     paginator = Paginator(post_list, NUM_OF_POSTS)
@@ -79,5 +80,25 @@ def post_create(request):
     else:
         initial_data = {'author': username}
         form = PostForm(initial=initial_data)
+    return render(request, 'posts/create_post.html', {'form': form,
+                                                      'author': username})
+
+
+def post_edit(request, post_id):
+    post = Post.objects.get(pk=post_id)
+    if request.user.id != post.author.id:
+        return redirect(f'/posts/{post_id}/')
+
+    author_id = request.user.id
+    username = post.author.get_full_name
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(f'/profile/{username}/')
+    else:
+        initial_data = {'author': post.author, 'text': post.text, 'group': post.group}
+        form = PostForm(initial=initial_data)
+
     return render(request, 'posts/create_post.html', {'form': form,
                                                       'author': username})
